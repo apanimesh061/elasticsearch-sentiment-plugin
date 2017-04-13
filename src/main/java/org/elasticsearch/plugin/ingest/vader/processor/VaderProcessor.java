@@ -69,12 +69,6 @@ public final class VaderProcessor extends AbstractProcessor {
                     sentimentAnalyzer.setInputStringProperties();
                     sentimentAnalyzer.analyse();
                     HashMap<String, Float> polarity = sentimentAnalyzer.getPolarity();
-
-                    String[] names = fullText.split("\\s+");
-                    int length = names.length;
-                    if (length < 2) {
-                        throw new IllegalArgumentException("field [" + field + "] should have a full name");
-                    }
                     try {
                         document.setFieldValue(polarityField, polarity);
                     } catch (Exception e) {
