@@ -31,8 +31,8 @@
         <elasticsearch.version>5.2.1</elasticsearch.version>
         <maven.compiler.target>1.8</maven.compiler.target>
         <elasticsearch.assembly.descriptor>${project.basedir}/src/main/assemblies/plugin.xml</elasticsearch.assembly.descriptor>
-        <elasticsearch.plugin.name>vader-sentiment-plugin</elasticsearch.plugin.name>
-        <elasticsearch.plugin.classname>org.elasticsearch.plugin.ingest.VaderSentimentIngestPlugin</elasticsearch.plugin.classname>
+        <elasticsearch.plugin.name>vader-sentiment-ingest-plugin</elasticsearch.plugin.name>
+        <elasticsearch.plugin.classname>org.elasticsearch.plugin.ingest.vader.processor.VaderSentimentPlugin</elasticsearch.plugin.classname>
         <elasticsearch.plugin.jvm>true</elasticsearch.plugin.jvm>
         <tests.rest.load_packaged>false</tests.rest.load_packaged>
         <skip.unit.tests>false</skip.unit.tests>
@@ -67,8 +67,14 @@
             <version>${elasticsearch.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.elasticsearch.test</groupId>
+            <artifactId>framework</artifactId>
+            <version>5.2.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-core</artifactId>
+            <artifactId>hamcrest-all</artifactId>
             <version>1.3</version>
             <scope>test</scope>
         </dependency>
