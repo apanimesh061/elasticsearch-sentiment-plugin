@@ -1,8 +1,22 @@
 package org.elasticsearch.plugin.ingest.vader.processor;
 
+import com.carrotsearch.randomizedtesting.annotations.Name;
+import com.carrotsearch.randomizedtesting.annotations.ParametersFactory;
+import org.elasticsearch.test.rest.yaml.ClientYamlTestCandidate;
+import org.elasticsearch.test.rest.yaml.ESClientYamlSuiteTestCase;
+
+import java.io.IOException;
+
 /**
- * @author Animesh Pandey
- *         Created on 4/22/2017.
+ *
  */
-public class VaderRestIT {
+public class VaderRestIT extends ESClientYamlSuiteTestCase {
+    protected VaderRestIT(@Name("yaml") ClientYamlTestCandidate testCandidate) {
+        super(testCandidate);
+    }
+
+    @ParametersFactory
+    public static Iterable<Object[]> parameters() throws IOException {
+        return ESClientYamlSuiteTestCase.createParameters();
+    }
 }

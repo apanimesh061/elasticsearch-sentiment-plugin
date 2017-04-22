@@ -1,0 +1,19 @@
+---
+"Test vader processor with defaults":
+  - do:
+      ingest.put_pipeline:
+        id: "my_pipeline"
+        body:  >
+          {
+            "version": 1,
+            "description": "_description",
+            "processors": [
+              {
+                "vader_analyzer": {
+                  "input_text_field": "content",
+                  "polarity_field": "polarity"
+                }
+              }
+            ]
+          }
+  - match: { acknowledged: true }
