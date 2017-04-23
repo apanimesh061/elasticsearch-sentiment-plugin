@@ -51,6 +51,12 @@
             <groupId>com.vader.sentiment</groupId>
             <artifactId>vader-sentiment-analyzer</artifactId>
             <version>${vader.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-lang</groupId>
+                    <artifactId>commons-lang</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
@@ -71,7 +77,6 @@
             <groupId>org.elasticsearch.test</groupId>
             <artifactId>framework</artifactId>
             <version>${elasticsearch.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.hamcrest</groupId>

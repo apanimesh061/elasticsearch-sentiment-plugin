@@ -4,6 +4,7 @@ import com.vader.sentiment.analyzer.SentimentAnalyzer;
 import org.elasticsearch.test.ESTestCase;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.runner.RunWith;
 
 import java.util.List;
 import java.util.Locale;
@@ -25,6 +26,8 @@ import static org.hamcrest.Matchers.equalTo;
  *
  * @author Animesh Pandey
  */
+
+@RunWith(com.carrotsearch.randomizedtesting.RandomizedRunner.class)
 public class VaderThreadSafeTests extends ESTestCase {
     private VaderSentimentService vaderSentimentService;
     private ExecutorService executorService;
