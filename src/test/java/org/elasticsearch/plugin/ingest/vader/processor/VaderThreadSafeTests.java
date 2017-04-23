@@ -39,7 +39,7 @@ public class VaderThreadSafeTests extends ESTestCase {
     }
 
     public void testThatVaderAnalyzerIsThreadSafe() throws InterruptedException {
-        int runs = 1000;
+        int runs = 20;
         CountDownLatch latch = new CountDownLatch(runs);
         List<SentimentAnalyzerRunnable> runnables = new ArrayList<>();
         List<DocumentPolarityPair> documentPolarityPairList = new ArrayList<>();
@@ -232,8 +232,8 @@ public class VaderThreadSafeTests extends ESTestCase {
         );
 
         for (int i = 0; i < runs; i++) {
-            DocumentPolarityPair randomPair = documentPolarityPairList
-                    .get(new Random().nextInt(documentPolarityPairList.size()));
+            int randomIndex = new Random().nextInt(documentPolarityPairList.size());
+            DocumentPolarityPair randomPair = documentPolarityPairList.get(randomIndex);
             SentimentAnalyzerRunnable runnable = new SentimentAnalyzerRunnable(i, randomPair, latch);
             runnables.add(runnable);
             executorService.submit(runnable);
@@ -249,22 +249,23 @@ public class VaderThreadSafeTests extends ESTestCase {
      */
     private class SentimentAnalyzerRunnable implements Runnable {
         private int index;
-        final DocumentPolarityPair document;
+        final DocumentPolarityPair currentDocumentPolarityPair;
         private CountDownLatch latch;
         HashMap<String, Float> actualResult;
         HashMap<String, Float> expectedResult;
 
-        SentimentAnalyzerRunnable(int index, DocumentPolarityPair document, CountDownLatch latch) {
+        SentimentAnalyzerRunnable(int index, DocumentPolarityPair currentDocumentPolarityPair, CountDownLatch latch) {
             this.index = index;
-            this.document = document;
+            this.currentDocumentPolarityPair = currentDocumentPolarityPair;
             this.latch = latch;
         }
 
         @Override
         public void run() {
             try {
-                String currentDocument = document.getDocument();
-                expectedResult = document.getPolarities();
+                String currentDocument = currentDocumentPolarityPair.getDocument();
+                System.out.print(currentDocument + "\n");
+                expectedResult = currentDocumentPolarityPair.getPolarities();
                 sentimentAnalyzerService.setInputString(currentDocument);
                 sentimentAnalyzerService.setInputStringProperties();
                 sentimentAnalyzerService.analyse();
@@ -278,7 +279,7 @@ public class VaderThreadSafeTests extends ESTestCase {
 
         private void assertResultIsCorrect() {
             assertThat(String.format(Locale.ROOT, "Expected task %s to have result %s", index, expectedResult),
-                    expectedResult.entrySet(), equalTo(expectedResult.entrySet()));
+                    expectedResult.entrySet(), equalTo(actualResult.entrySet()));
         }
     }
 
