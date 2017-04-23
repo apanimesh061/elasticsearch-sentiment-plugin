@@ -16,6 +16,9 @@ import static org.hamcrest.Matchers.equalTo;
 
 
 /**
+ * This test confirms that the {@link SentimentAnalyzer} class is thread safe.
+ * For this we have used a {@link CountDownLatch} to spin in some threads.
+ *
  * @author Animesh Pandey
  */
 public class VaderThreadSafeTests extends ESTestCase {
@@ -240,6 +243,10 @@ public class VaderThreadSafeTests extends ESTestCase {
         runnables.forEach(SentimentAnalyzerRunnable::assertResultIsCorrect);
     }
 
+    /**
+     * This class passes one text document to one thread and then compares if the current
+     * thread is producing the same result as expected.
+     */
     private class SentimentAnalyzerRunnable implements Runnable {
         private int index;
         final DocumentPolarityPair document;
@@ -275,6 +282,9 @@ public class VaderThreadSafeTests extends ESTestCase {
         }
     }
 
+    /**
+     * Class that stores a text document and its sentiment polarity.
+     */
     private class DocumentPolarityPair {
         final String document;
         final HashMap<String, Float> polarities;
