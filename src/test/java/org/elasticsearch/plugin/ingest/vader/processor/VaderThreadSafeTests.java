@@ -36,7 +36,7 @@ public class VaderThreadSafeTests extends ESTestCase {
     }
 
     public void testThatVaderAnalyzerIsThreadSafe() throws InterruptedException {
-        int runs = 100;
+        int runs = 1000;
         CountDownLatch latch = new CountDownLatch(runs);
         List<SentimentAnalyzerRunnable> runnables = new ArrayList<>();
         List<DocumentPolarityPair> documentPolarityPairList = new ArrayList<>();

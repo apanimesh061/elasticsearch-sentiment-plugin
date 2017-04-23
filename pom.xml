@@ -36,6 +36,7 @@
         <elasticsearch.plugin.jvm>true</elasticsearch.plugin.jvm>
         <tests.rest.load_packaged>false</tests.rest.load_packaged>
         <skip.unit.tests>false</skip.unit.tests>
+        <jvm.options>-Dtests.security.manager=false</jvm.options>
     </properties>
 
     <repositories>
@@ -111,6 +112,7 @@
                     <includes>
                         <include>**/*Tests.java</include>
                     </includes>
+                    <argLine>${jvm.options}</argLine>
                 </configuration>
             </plugin>
             <plugin>
