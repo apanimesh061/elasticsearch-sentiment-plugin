@@ -5,12 +5,16 @@ import org.elasticsearch.test.ESTestCase;
 import org.junit.After;
 import org.junit.Before;
 
+import java.util.List;
+import java.util.Locale;
+import java.util.Random;
+import java.util.HashMap;
+import java.util.ArrayList;
 import java.io.IOException;
-import java.util.*;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.Executors;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 import static org.hamcrest.Matchers.equalTo;
 
@@ -22,13 +26,13 @@ import static org.hamcrest.Matchers.equalTo;
  * @author Animesh Pandey
  */
 public class VaderThreadSafeTests extends ESTestCase {
-    private SentimentAnalyzer sentimentAnalyzerService;
+    private VaderSentimentService vaderSentimentService;
     private ExecutorService executorService;
 
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        sentimentAnalyzerService = new SentimentAnalyzer();
+        vaderSentimentService = new VaderSentimentService().start();
         executorService = Executors.newFixedThreadPool(10);
     }
 
@@ -38,8 +42,8 @@ public class VaderThreadSafeTests extends ESTestCase {
         terminate(executorService);
     }
 
-    public void testThatVaderAnalyzerIsThreadSafe() throws InterruptedException {
-        int runs = 20;
+    public void testThatVaderAnalyzerServiceIsThreadSafe() throws InterruptedException {
+        int runs = 1000;
         CountDownLatch latch = new CountDownLatch(runs);
         List<SentimentAnalyzerRunnable> runnables = new ArrayList<>();
         List<DocumentPolarityPair> documentPolarityPairList = new ArrayList<>();
@@ -264,12 +268,8 @@ public class VaderThreadSafeTests extends ESTestCase {
         public void run() {
             try {
                 String currentDocument = currentDocumentPolarityPair.getDocument();
-                System.out.print(currentDocument + "\n");
                 expectedResult = currentDocumentPolarityPair.getPolarities();
-                sentimentAnalyzerService.setInputString(currentDocument);
-                sentimentAnalyzerService.setInputStringProperties();
-                sentimentAnalyzerService.analyse();
-                actualResult = sentimentAnalyzerService.getPolarity();
+                actualResult = vaderSentimentService.apply(currentDocument);
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {

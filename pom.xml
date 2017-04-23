@@ -70,7 +70,7 @@
         <dependency>
             <groupId>org.elasticsearch.test</groupId>
             <artifactId>framework</artifactId>
-            <version>5.2.1</version>
+            <version>${elasticsearch.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>

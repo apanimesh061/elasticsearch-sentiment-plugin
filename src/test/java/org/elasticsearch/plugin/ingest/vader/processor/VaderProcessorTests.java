@@ -1,6 +1,5 @@
 package org.elasticsearch.plugin.ingest.vader.processor;
 
-import com.vader.sentiment.analyzer.SentimentAnalyzer;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -24,13 +23,13 @@ import static org.junit.Assert.assertThat;
  */
 @RunWith(com.carrotsearch.randomizedtesting.RandomizedRunner.class)
 public class VaderProcessorTests {
-    private SentimentAnalyzer sentimentAnalyzerService;
+    private VaderSentimentService vaderSentimentService;
     private static String SOURCE_FIELD = "source_field";
     private static String TARGET_FIELD = "target_field";
 
     @Before
     public void setUp() {
-        sentimentAnalyzerService = new SentimentAnalyzer();
+        vaderSentimentService = new VaderSentimentService();
     }
 
     /**
@@ -41,10 +40,10 @@ public class VaderProcessorTests {
     @Test
     public void testForNonEmptyValidDocument() throws Exception {
         VaderProcessor vaderProcessor = new VaderProcessor(
+                vaderSentimentService,
                 randomAsciiOfLength(10),
                 SOURCE_FIELD,
                 TARGET_FIELD,
-                sentimentAnalyzerService,
                 false
         );
 
@@ -62,10 +61,10 @@ public class VaderProcessorTests {
     @Test
     public void testForEmptyValidDocument() throws Exception {
         VaderProcessor vaderProcessor = new VaderProcessor(
+                vaderSentimentService,
                 randomAsciiOfLength(10),
                 SOURCE_FIELD,
                 TARGET_FIELD,
-                sentimentAnalyzerService,
                 false
         );
 
@@ -81,10 +80,10 @@ public class VaderProcessorTests {
     @Test(expected = IllegalArgumentException.class)
     public void testForNonEmptyInValidDocument() throws Exception {
         VaderProcessor vaderProcessor = new VaderProcessor(
+                vaderSentimentService,
                 randomAsciiOfLength(10),
                 SOURCE_FIELD,
                 TARGET_FIELD,
-                sentimentAnalyzerService,
                 false
         );
 
@@ -99,10 +98,10 @@ public class VaderProcessorTests {
     @Test(expected = IllegalArgumentException.class)
     public void testForNonEmptyInValidDocumentWithExistingTargetField() throws Exception {
         VaderProcessor vaderProcessor = new VaderProcessor(
+                vaderSentimentService,
                 randomAsciiOfLength(10),
                 SOURCE_FIELD,
                 TARGET_FIELD,
-                sentimentAnalyzerService,
                 false
         );
 

@@ -17,6 +17,22 @@ import java.util.Map;
  * @author Animesh Pandey
  */
 public final class VaderProcessor extends AbstractProcessor {
+
+    /**
+     * This is wrapper around the {@link SentimentAnalyzer} which helps in making it thread safe
+     * as the original implementation is not thread safe.
+     * <p>
+     * This class helps in calculating the value of the text associated with the
+     * {@link org.elasticsearch.plugin.ingest.vader.processor.VaderProcessor#sourceField}
+     * and then sets the result obtained from {@link SentimentAnalyzer#getPolarity()}
+     * to the field {@link org.elasticsearch.plugin.ingest.vader.processor.VaderProcessor#targetField}.
+     * <p>
+     * Ref:
+     * The implementation of {@link SentimentAnalyzer} is
+     * given <a href="https://github.com/apanimesh061/VaderSentimentJava">here</a>.
+     */
+    private VaderSentimentService vaderSentimentService;
+
     /**
      * Name of the current processor.
      * We will be using this name when we register or query
@@ -36,18 +52,6 @@ public final class VaderProcessor extends AbstractProcessor {
     private final String targetField;
 
     /**
-     * This class helps in calculating the value of the text associated with the
-     * {@link org.elasticsearch.plugin.ingest.vader.processor.VaderProcessor#sourceField}
-     * and then sets the result obtained from {@link SentimentAnalyzer#getPolarity()}
-     * to the field {@link org.elasticsearch.plugin.ingest.vader.processor.VaderProcessor#targetField}.
-     * <p>
-     * Ref:
-     * The implementation of {@link SentimentAnalyzer} is
-     * given <a href="https://github.com/apanimesh061/VaderSentimentJava">here</a>.
-     */
-    private final SentimentAnalyzer sentimentAnalyzer;
-
-    /**
      * If in the input document the {@link org.elasticsearch.plugin.ingest.vader.processor.VaderProcessor#sourceField}
      * does not exist, you either ignore that document or throw an exception.
      * <p>
@@ -59,18 +63,18 @@ public final class VaderProcessor extends AbstractProcessor {
      * Parameterised constructor for current processor.
      * This sets the values for all the field in this class.
      *
-     * @param tag               Tag of the current processor
-     * @param processableField  field in input document that will be processed
-     * @param targetField     field that will be added to the current document
-     * @param sentimentAnalyzer library that will help in performing sentiment analysis
-     * @param ignoreMissing     flag specified to make the processor to ignore invalid documents
+     * @param vaderSentimentService library that will help in performing sentiment analysis
+     * @param tag                   Tag of the current processor
+     * @param sourceField           field in input document that will be processed
+     * @param targetField           field that will be added to the current document
+     * @param ignoreMissing         flag specified to make the processor to ignore invalid documents
      */
-    public VaderProcessor(String tag, String processableField, String targetField,
-                          SentimentAnalyzer sentimentAnalyzer, boolean ignoreMissing) {
+    public VaderProcessor(VaderSentimentService vaderSentimentService, String tag, String sourceField,
+                          String targetField, boolean ignoreMissing) {
         super(tag);
-        this.sourceField = processableField;
+        this.vaderSentimentService = vaderSentimentService;
+        this.sourceField = sourceField;
         this.targetField = targetField;
-        this.sentimentAnalyzer = sentimentAnalyzer;
         this.ignoreMissing = ignoreMissing;
     }
 
@@ -113,13 +117,13 @@ public final class VaderProcessor extends AbstractProcessor {
         /**
          * Validate the current document.
          */
-        validateProcessableField(document, sourceField);
-        validateTargetField(document, targetField);
+        validateProcessableField(document, this.sourceField);
+        validateTargetField(document, this.targetField);
 
         /**
          * If correctly validated, retrieve the value of the sourceField.
          */
-        Object value = document.getFieldValue(sourceField, Object.class);
+        Object value = document.getFieldValue(this.sourceField, Object.class);
 
         /**
          * Make sure that the value of sourceField is a String and then perform the
@@ -132,14 +136,11 @@ public final class VaderProcessor extends AbstractProcessor {
                  * Perform processing only if the text length is greater than 1 character.
                  */
                 if (fullText.length() > 1) {
-                    sentimentAnalyzer.setInputString(fullText);
-                    sentimentAnalyzer.setInputStringProperties();
-                    sentimentAnalyzer.analyse();
-                    HashMap<String, Float> polarity = sentimentAnalyzer.getPolarity();
+                    HashMap<String, Float> polarity = this.vaderSentimentService.apply(fullText);
                     try {
-                        document.setFieldValue(targetField, polarity);
+                        document.setFieldValue(this.targetField, polarity);
                     } catch (Exception e) {
-                        document.setFieldValue(sourceField, value);
+                        document.setFieldValue(this.sourceField, value);
                         throw e;
                     }
                 }
@@ -175,10 +176,10 @@ public final class VaderProcessor extends AbstractProcessor {
      * This class creates a factory of processors.
      */
     public static final class Factory implements Processor.Factory {
-        private SentimentAnalyzer sentimentAnalyzer;
+        private VaderSentimentService vaderSentimentService;
 
-        public Factory(SentimentAnalyzer sentimentAnalyzer) {
-            this.sentimentAnalyzer = sentimentAnalyzer;
+        public Factory(VaderSentimentService vaderSentimentService) {
+            this.vaderSentimentService = vaderSentimentService;
         }
 
         /**
@@ -193,10 +194,10 @@ public final class VaderProcessor extends AbstractProcessor {
         @Override
         public VaderProcessor create(Map<String, Processor.Factory> processorFactories, String processorTag,
                                      Map<String, Object> config) throws Exception {
-            String sourceField = ConfigurationUtils.readStringProperty(TYPE, processorTag, config, "input_text_field");
+            String sourceField = ConfigurationUtils.readStringProperty(TYPE, processorTag, config, "input_field");
             String targetField = ConfigurationUtils.readStringProperty(TYPE, processorTag, config, "target_field");
             boolean ignoreMissing = ConfigurationUtils.readBooleanProperty(TYPE, processorTag, config, "ignore_missing", false);
-            return new VaderProcessor(processorTag, sourceField, targetField, sentimentAnalyzer, ignoreMissing);
+            return new VaderProcessor(this.vaderSentimentService, processorTag, sourceField, targetField, ignoreMissing);
         }
     }
 }
