@@ -1,7 +1,6 @@
 package org.elasticsearch.plugin.ingest.vader.processor;
 
 import com.vader.sentiment.analyzer.SentimentAnalyzer;
-import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -14,6 +13,7 @@ import java.util.Map;
 
 import static org.elasticsearch.test.ESTestCase.random;
 import static org.elasticsearch.ingest.RandomDocumentPicks.randomIngestDocument;
+import static org.elasticsearch.test.ESTestCase.randomAsciiOfLength;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertThat;
@@ -41,7 +41,7 @@ public class VaderProcessorTests {
     @Test
     public void testForNonEmptyValidDocument() throws Exception {
         VaderProcessor vaderProcessor = new VaderProcessor(
-                RandomStringUtils.randomAscii(10),
+                randomAsciiOfLength(10),
                 SOURCE_FIELD,
                 TARGET_FIELD,
                 sentimentAnalyzerService,
@@ -62,7 +62,7 @@ public class VaderProcessorTests {
     @Test
     public void testForEmptyValidDocument() throws Exception {
         VaderProcessor vaderProcessor = new VaderProcessor(
-                RandomStringUtils.randomAscii(10),
+                randomAsciiOfLength(10),
                 SOURCE_FIELD,
                 TARGET_FIELD,
                 sentimentAnalyzerService,
@@ -81,7 +81,7 @@ public class VaderProcessorTests {
     @Test(expected = IllegalArgumentException.class)
     public void testForNonEmptyInValidDocument() throws Exception {
         VaderProcessor vaderProcessor = new VaderProcessor(
-                RandomStringUtils.randomAscii(10),
+                randomAsciiOfLength(10),
                 SOURCE_FIELD,
                 TARGET_FIELD,
                 sentimentAnalyzerService,
@@ -99,7 +99,7 @@ public class VaderProcessorTests {
     @Test(expected = IllegalArgumentException.class)
     public void testForNonEmptyInValidDocumentWithExistingTargetField() throws Exception {
         VaderProcessor vaderProcessor = new VaderProcessor(
-                RandomStringUtils.randomAscii(10),
+                randomAsciiOfLength(10),
                 SOURCE_FIELD,
                 TARGET_FIELD,
                 sentimentAnalyzerService,

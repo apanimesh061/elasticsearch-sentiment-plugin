@@ -11,7 +11,7 @@ import java.io.IOException;
  *
  */
 public class VaderRestIT extends ESClientYamlSuiteTestCase {
-    protected VaderRestIT(@Name("yaml") ClientYamlTestCandidate testCandidate) {
+    public VaderRestIT(@Name("yaml") ClientYamlTestCandidate testCandidate) {
         super(testCandidate);
     }
 
