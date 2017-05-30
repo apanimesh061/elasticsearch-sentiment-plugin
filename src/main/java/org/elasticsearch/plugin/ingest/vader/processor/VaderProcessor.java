@@ -7,7 +7,6 @@ import org.elasticsearch.ingest.IngestDocument;
 import org.elasticsearch.ingest.Processor;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -136,7 +135,7 @@ public final class VaderProcessor extends AbstractProcessor {
                  * Perform processing only if the text length is greater than 1 character.
                  */
                 if (fullText.length() > 1) {
-                    HashMap<String, Float> polarity = this.vaderSentimentService.apply(fullText);
+                    Map<String, Float> polarity = this.vaderSentimentService.apply(fullText);
                     try {
                         document.setFieldValue(this.targetField, polarity);
                     } catch (Exception e) {

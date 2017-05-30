@@ -1,6 +1,7 @@
 package org.elasticsearch.plugin.ingest.vader.processor;
 
 import com.vader.sentiment.analyzer.SentimentAnalyzer;
+import com.vader.sentiment.util.ScoreType;
 import org.elasticsearch.test.ESTestCase;
 import org.junit.After;
 import org.junit.Before;
@@ -8,6 +9,7 @@ import org.junit.runner.RunWith;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Random;
 import java.util.HashMap;
 import java.util.ArrayList;
@@ -54,10 +56,10 @@ public class VaderThreadSafeTests extends ESTestCase {
                 new DocumentPolarityPair(
                         "VADER is smart, handsome, and funny.",
                         new HashMap<String, Float>() {{
-                            put("negative", 0.0F);
-                            put("neutral", 0.254F);
-                            put("positive", 0.746F);
-                            put("compound", 0.8316F);
+                            put(ScoreType.NEGATIVE, 0.0F);
+                            put(ScoreType.NEUTRAL, 0.254F);
+                            put(ScoreType.POSITIVE, 0.746F);
+                            put(ScoreType.COMPOUND, 0.8316F);
                         }}
                 )
         );
@@ -65,10 +67,10 @@ public class VaderThreadSafeTests extends ESTestCase {
                 new DocumentPolarityPair(
                         "VADER is smart, handsome, and funny!",
                         new HashMap<String, Float>() {{
-                            put("negative", 0.0F);
-                            put("neutral", 0.248F);
-                            put("positive", 0.752F);
-                            put("compound", 0.8439F);
+                            put(ScoreType.NEGATIVE, 0.0F);
+                            put(ScoreType.NEUTRAL, 0.248F);
+                            put(ScoreType.POSITIVE, 0.752F);
+                            put(ScoreType.COMPOUND, 0.8439F);
                         }}
                 )
         );
@@ -76,10 +78,10 @@ public class VaderThreadSafeTests extends ESTestCase {
                 new DocumentPolarityPair(
                         "VADER is very smart, handsome, and funny.",
                         new HashMap<String, Float>() {{
-                            put("negative", 0.0F);
-                            put("neutral", 0.299F);
-                            put("positive", 0.701F);
-                            put("compound", 0.8545F);
+                            put(ScoreType.NEGATIVE, 0.0F);
+                            put(ScoreType.NEUTRAL, 0.299F);
+                            put(ScoreType.POSITIVE, 0.701F);
+                            put(ScoreType.COMPOUND, 0.8545F);
                         }}
                 )
         );
@@ -87,10 +89,10 @@ public class VaderThreadSafeTests extends ESTestCase {
                 new DocumentPolarityPair(
                         "VADER is VERY SMART, handsome, and FUNNY.",
                         new HashMap<String, Float>() {{
-                            put("negative", 0.0F);
-                            put("neutral", 0.246F);
-                            put("positive", 0.754F);
-                            put("compound", 0.9227F);
+                            put(ScoreType.NEGATIVE, 0.0F);
+                            put(ScoreType.NEUTRAL, 0.246F);
+                            put(ScoreType.POSITIVE, 0.754F);
+                            put(ScoreType.COMPOUND, 0.9227F);
                         }}
                 )
         );
@@ -98,10 +100,10 @@ public class VaderThreadSafeTests extends ESTestCase {
                 new DocumentPolarityPair(
                         "VADER is VERY SMART, handsome, and FUNNY!!!",
                         new HashMap<String, Float>() {{
-                            put("negative", 0.0F);
-                            put("neutral", 0.233F);
-                            put("positive", 0.767F);
-                            put("compound", 0.9342F);
+                            put(ScoreType.NEGATIVE, 0.0F);
+                            put(ScoreType.NEUTRAL, 0.233F);
+                            put(ScoreType.POSITIVE, 0.767F);
+                            put(ScoreType.COMPOUND, 0.9342F);
                         }}
                 )
         );
@@ -109,10 +111,10 @@ public class VaderThreadSafeTests extends ESTestCase {
                 new DocumentPolarityPair(
                         "VADER is VERY SMART, really handsome, and INCREDIBLY FUNNY!!!",
                         new HashMap<String, Float>() {{
-                            put("negative", 0.0F);
-                            put("neutral", 0.294F);
-                            put("positive", 0.706F);
-                            put("compound", 0.9469F);
+                            put(ScoreType.NEGATIVE, 0.0F);
+                            put(ScoreType.NEUTRAL, 0.294F);
+                            put(ScoreType.POSITIVE, 0.706F);
+                            put(ScoreType.COMPOUND, 0.9469F);
                         }}
                 )
         );
@@ -120,10 +122,10 @@ public class VaderThreadSafeTests extends ESTestCase {
                 new DocumentPolarityPair(
                         "The book was good.",
                         new HashMap<String, Float>() {{
-                            put("negative", 0.0F);
-                            put("neutral", 0.508F);
-                            put("positive", 0.492F);
-                            put("compound", 0.4404F);
+                            put(ScoreType.NEGATIVE, 0.0F);
+                            put(ScoreType.NEUTRAL, 0.508F);
+                            put(ScoreType.POSITIVE, 0.492F);
+                            put(ScoreType.COMPOUND, 0.4404F);
                         }}
                 )
         );
@@ -131,10 +133,10 @@ public class VaderThreadSafeTests extends ESTestCase {
                 new DocumentPolarityPair(
                         "The book was kind of good.",
                         new HashMap<String, Float>() {{
-                            put("negative", 0.0F);
-                            put("neutral", 0.657F);
-                            put("positive", 0.343F);
-                            put("compound", 0.3832F);
+                            put(ScoreType.NEGATIVE, 0.0F);
+                            put(ScoreType.NEUTRAL, 0.657F);
+                            put(ScoreType.POSITIVE, 0.343F);
+                            put(ScoreType.COMPOUND, 0.3832F);
                         }}
                 )
         );
@@ -142,10 +144,10 @@ public class VaderThreadSafeTests extends ESTestCase {
                 new DocumentPolarityPair(
                         "The plot was good, but the characters are uncompelling and the dialog is not great.",
                         new HashMap<String, Float>() {{
-                            put("negative", 0.327F);
-                            put("neutral", 0.579F);
-                            put("positive", 0.094F);
-                            put("compound", -0.7042F);
+                            put(ScoreType.NEGATIVE, 0.327F);
+                            put(ScoreType.NEUTRAL, 0.579F);
+                            put(ScoreType.POSITIVE, 0.094F);
+                            put(ScoreType.COMPOUND, -0.7042F);
                         }}
                 )
         );
@@ -153,10 +155,10 @@ public class VaderThreadSafeTests extends ESTestCase {
                 new DocumentPolarityPair(
                         "A really bad, horrible book.",
                         new HashMap<String, Float>() {{
-                            put("negative", 0.791F);
-                            put("neutral", 0.209F);
-                            put("positive", 0.0F);
-                            put("compound", -0.8211F);
+                            put(ScoreType.NEGATIVE, 0.791F);
+                            put(ScoreType.NEUTRAL, 0.209F);
+                            put(ScoreType.POSITIVE, 0.0F);
+                            put(ScoreType.COMPOUND, -0.8211F);
                         }}
                 )
         );
@@ -164,10 +166,10 @@ public class VaderThreadSafeTests extends ESTestCase {
                 new DocumentPolarityPair(
                         "At least it isn't a horrible book.",
                         new HashMap<String, Float>() {{
-                            put("negative", 0.0F);
-                            put("neutral", 0.637F);
-                            put("positive", 0.363F);
-                            put("compound", 0.431F);
+                            put(ScoreType.NEGATIVE, 0.0F);
+                            put(ScoreType.NEUTRAL, 0.637F);
+                            put(ScoreType.POSITIVE, 0.363F);
+                            put(ScoreType.COMPOUND, 0.431F);
                         }}
                 )
         );
@@ -175,10 +177,10 @@ public class VaderThreadSafeTests extends ESTestCase {
                 new DocumentPolarityPair(
                         ":) and :D",
                         new HashMap<String, Float>() {{
-                            put("negative", 0.0F);
-                            put("neutral", 0.124F);
-                            put("positive", 0.876F);
-                            put("compound", 0.7925F);
+                            put(ScoreType.NEGATIVE, 0.0F);
+                            put(ScoreType.NEUTRAL, 0.124F);
+                            put(ScoreType.POSITIVE, 0.876F);
+                            put(ScoreType.COMPOUND, 0.7925F);
                         }}
                 )
         );
@@ -186,10 +188,10 @@ public class VaderThreadSafeTests extends ESTestCase {
                 new DocumentPolarityPair(
                         "",
                         new HashMap<String, Float>() {{
-                            put("negative", 0.0F);
-                            put("neutral", 0.0F);
-                            put("positive", 0.0F);
-                            put("compound", 0.0F);
+                            put(ScoreType.NEGATIVE, 0.0F);
+                            put(ScoreType.NEUTRAL, 0.0F);
+                            put(ScoreType.POSITIVE, 0.0F);
+                            put(ScoreType.COMPOUND, 0.0F);
                         }}
                 )
         );
@@ -197,10 +199,10 @@ public class VaderThreadSafeTests extends ESTestCase {
                 new DocumentPolarityPair(
                         "Today sux",
                         new HashMap<String, Float>() {{
-                            put("negative", 0.714F);
-                            put("neutral", 0.286F);
-                            put("positive", 0.0F);
-                            put("compound", -0.3612F);
+                            put(ScoreType.NEGATIVE, 0.714F);
+                            put(ScoreType.NEUTRAL, 0.286F);
+                            put(ScoreType.POSITIVE, 0.0F);
+                            put(ScoreType.COMPOUND, -0.3612F);
                         }}
                 )
         );
@@ -208,10 +210,10 @@ public class VaderThreadSafeTests extends ESTestCase {
                 new DocumentPolarityPair(
                         "Today sux!",
                         new HashMap<String, Float>() {{
-                            put("negative", 0.736F);
-                            put("neutral", 0.264F);
-                            put("positive", 0.0F);
-                            put("compound", -0.4199F);
+                            put(ScoreType.NEGATIVE, 0.736F);
+                            put(ScoreType.NEUTRAL, 0.264F);
+                            put(ScoreType.POSITIVE, 0.0F);
+                            put(ScoreType.COMPOUND, -0.4199F);
                         }}
                 )
         );
@@ -219,10 +221,10 @@ public class VaderThreadSafeTests extends ESTestCase {
                 new DocumentPolarityPair(
                         "Today SUX!",
                         new HashMap<String, Float>() {{
-                            put("negative", 0.779F);
-                            put("neutral", 0.221F);
-                            put("positive", 0.0F);
-                            put("compound", -0.5461F);
+                            put(ScoreType.NEGATIVE, 0.779F);
+                            put(ScoreType.NEUTRAL, 0.221F);
+                            put(ScoreType.POSITIVE, 0.0F);
+                            put(ScoreType.COMPOUND, -0.5461F);
                         }}
                 )
         );
@@ -230,10 +232,10 @@ public class VaderThreadSafeTests extends ESTestCase {
                 new DocumentPolarityPair(
                         "Today kinda sux! But I'll get by, lol",
                         new HashMap<String, Float>() {{
-                            put("negative", 0.195F);
-                            put("neutral", 0.531F);
-                            put("positive", 0.274F);
-                            put("compound", 0.2228F);
+                            put(ScoreType.NEGATIVE, 0.195F);
+                            put(ScoreType.NEUTRAL, 0.531F);
+                            put(ScoreType.POSITIVE, 0.274F);
+                            put(ScoreType.COMPOUND, 0.2228F);
                         }}
                 )
         );
@@ -258,8 +260,8 @@ public class VaderThreadSafeTests extends ESTestCase {
         private int index;
         final DocumentPolarityPair currentDocumentPolarityPair;
         private CountDownLatch latch;
-        HashMap<String, Float> actualResult;
-        HashMap<String, Float> expectedResult;
+        Map<String, Float> actualResult;
+        Map<String, Float> expectedResult;
 
         SentimentAnalyzerRunnable(int index, DocumentPolarityPair currentDocumentPolarityPair, CountDownLatch latch) {
             this.index = index;

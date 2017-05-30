@@ -1,5 +1,6 @@
 package org.elasticsearch.plugin.ingest.vader.processor;
 
+import com.vader.sentiment.util.ScoreType;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -49,7 +50,8 @@ public class VaderProcessorTests {
 
         Map<String, Object> entityData = getIngestDocumentData(vaderProcessor, getValidIngestDocument());
         Object sourceData = getIngestDocumentSourceData(vaderProcessor, getValidIngestDocument());
-        assertThat(entityData.keySet(), containsInAnyOrder("compound", "positive", "negative", "neutral"));
+        assertThat(entityData.keySet(),
+            containsInAnyOrder(ScoreType.COMPOUND, ScoreType.NEGATIVE, ScoreType.NEUTRAL, ScoreType.POSITIVE));
         assertThat(sourceData, instanceOf(String.class));
     }
 

@@ -5,7 +5,7 @@ import org.apache.log4j.Logger;
 import org.elasticsearch.common.StopWatch;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Animesh Pandey
@@ -28,7 +28,7 @@ public class VaderSentimentService {
         return this;
     }
 
-    public HashMap<String, Float> apply(String document) throws IOException {
+    public Map<String, Float> apply(String document) throws IOException {
         try {
             SentimentAnalyzer sentimentAnalyzer = new SentimentAnalyzer();
             if (sentimentAnalyzerThreadLocal.get() == null || !sentimentAnalyzerThreadLocal.get().equals(sentimentAnalyzer)) {
