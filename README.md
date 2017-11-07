@@ -112,6 +112,32 @@ This request will transform the input document by adding `{"polarity":{"negative
 
 Now let's see how do we ingest the document without the `Simulate API`:
 
+  First we need to add our pipeline to elastic (here we name it 'sentiment-analyzer'),
+  
+    curl --request PUT \
+      --url 'http://localhost:9200/_ingest/pipeline/sentiment-analyzer \
+      --header 'content-type: application/json' \
+      --data '{
+        "description": "Apply VADER sentiment analysis on text.",
+        "processors": [
+          {
+            "vader_analyzer": {
+              "input_field": "content",
+              "target_field": "polarity"
+            }
+          }
+        ],
+        "version": 1
+      }'
+      
+   which returns:
+   
+      {"acknowledged":true}
+      
+      
+   Now we can check it
+      
+      
     curl --request POST \
       --url 'http://localhost:9200/yelp_index/review/HGZ1H9j7J3RCzX2CC7XCcg2?pipeline=sentiment-analyzer' \
       --header 'content-type: application/json' \
@@ -154,7 +180,7 @@ Now let's see how do we ingest the document without the `Simulate API`:
         "created": true
     }
 
-Now let's seehow this document has been indexed:
+Now let's see how this document has been indexed:
 
     curl --request POST \
       --url http://localhost:9200/yelp_index/review/_search \
